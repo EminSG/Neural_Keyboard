@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Ezorrio Keyboard</string>
+    <string name="service_ime">Keyboard Service</string>
+</resources>
