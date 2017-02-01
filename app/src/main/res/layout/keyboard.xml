@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<android.inputmethodservice.KeyboardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/keyboard"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    style="@style/Widget.KeyboardView"/>
+    android:layout_height="wrap_content">
+
+    <io.ezorrio.keyboard.view.SuggestionsView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/suggestion_view"
+        android:background="#263238"/>
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard_view"
+        style="@style/Widget.KeyboardView"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
