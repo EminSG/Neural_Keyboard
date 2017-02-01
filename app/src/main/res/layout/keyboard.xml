@@ -10,6 +10,11 @@
         android:id="@+id/suggestion_view"
         android:background="#263238"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#909090"/>
+
     <android.inputmethodservice.KeyboardView
         android:id="@+id/keyboard_view"
         style="@style/Widget.KeyboardView"

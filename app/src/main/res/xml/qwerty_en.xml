@@ -54,9 +54,9 @@
     <Row android:rowEdgeFlags="bottom">
         <Key android:codes="-100" android:keyWidth="15%p" android:keyIcon="@drawable/ic_numeric" android:keyEdgeFlags="left"/>
         <Key android:codes="-101" android:keyIcon="@drawable/ic_language"/>
-        <Key android:codes="46" android:keyLabel="." />
-        <Key android:codes="32" android:keyWidth="30%p" android:isRepeatable="true" android:keyLabel="English"/>
         <Key android:codes="44" android:keyLabel="," />
+        <Key android:codes="32" android:keyWidth="30%p" android:isRepeatable="true" android:keyLabel="English"/>
+        <Key android:codes="46" android:keyLabel="." />
         <Key android:codes="63" android:keyLabel="\? / ! :"/>
         <Key android:codes="-4" android:keyWidth="15%p" android:keyEdgeFlags="right" android:keyIcon="@drawable/ic_done"/>
     </Row>

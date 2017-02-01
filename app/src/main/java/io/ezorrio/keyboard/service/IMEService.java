@@ -70,6 +70,12 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
         mKeyboardView.setOnKeyboardActionListener(this);
 
         mSuggestionsView  = (SuggestionsView) root.findViewById(R.id.suggestion_view);
+        mSuggestionsView.setCallback(new SuggestionsView.SuggestionViewCallback() {
+            @Override
+            public void onSuggestionClicked(int which) {
+                Toast.makeText(getApplicationContext(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mInputConnection = getCurrentInputConnection();
         return root;
