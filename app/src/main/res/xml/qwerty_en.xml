@@ -56,7 +56,7 @@
         <Key android:codes="-101" android:keyIcon="@drawable/ic_language" android:isModifier="true"/>
         <Key android:codes="44" android:keyLabel="," />
         <Key android:codes="32" android:keyWidth="40%p" android:isRepeatable="true" android:keyLabel="English"/>
-        <Key android:codes="46" android:keyLabel="." android:popupCharacters="\? / !" android:popupKeyboard="@xml/popup"/>
+        <Key android:codes="46" android:keyLabel="."/>
         <Key android:codes="-4" android:keyWidth="15%p" android:keyEdgeFlags="right" android:keyIcon="@drawable/ic_done" android:isModifier="true"/>
     </Row>
 </Keyboard>

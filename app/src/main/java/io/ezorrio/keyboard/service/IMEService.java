@@ -103,7 +103,7 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
-        mInputConnection = getCurrentInputConnection();
+        updateConnections();
         playClick(primaryCode);
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
@@ -262,5 +262,10 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
         mInputConnection.deleteSurroundingText(currentWord.length(), 0);
         mInputConnection.setComposingText(wordForInsert, 1);
         mInputConnection.finishComposingText();
+    }
+
+    private void updateConnections(){
+        mInputConnection = getCurrentInputConnection();
+        mInputConnectionHelper.updateInputConnection(mInputConnection);
     }
 }

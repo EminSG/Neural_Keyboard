@@ -8,6 +8,11 @@ import android.view.inputmethod.InputConnection;
 
 import java.util.Objects;
 
+import static io.ezorrio.keyboard.constants.Symbols.DOT;
+import static io.ezorrio.keyboard.constants.Symbols.ENTER;
+import static io.ezorrio.keyboard.constants.Symbols.EXCLAMATION;
+import static io.ezorrio.keyboard.constants.Symbols.QUESTION;
+
 /**
  * Created by golde on 11.02.2017.
  */
@@ -23,16 +28,30 @@ public class InputConnectionHelper {
     }
 
     public boolean needShift() {
-        String text = mInputConnection.getTextBeforeCursor(2, InputConnection.GET_TEXT_WITH_STYLES).toString();
-        if (text == null){
+        if (mInputConnection == null){
             return true;
         }
-        return (text.isEmpty() || text.endsWith(". ") || text.endsWith("? ") || text.endsWith("! "));
+
+        String textStr = Utils.charSeqToString(mInputConnection.getTextBeforeCursor(2, InputConnection.GET_TEXT_WITH_STYLES));
+        Log.d(TAG, textStr == null ? "null" : textStr);
+        return (textStr == null || textStr.isEmpty() ||
+                textStr.endsWith(DOT + SPACE) ||
+                textStr.endsWith(QUESTION + SPACE) ||
+                textStr.endsWith(EXCLAMATION + SPACE) ||
+                textStr.endsWith(ENTER));
     }
 
     public String getCurrentWord() {
-        String beforeCursor = mInputConnection.getTextBeforeCursor(20, InputConnection.GET_TEXT_WITH_STYLES).toString();
-        String afterCursor = mInputConnection.getTextAfterCursor(20, InputConnection.GET_TEXT_WITH_STYLES).toString();
+        if (mInputConnection == null){
+            return null;
+        }
+        String beforeCursor = Utils.charSeqToString(mInputConnection.getTextBeforeCursor(20, InputConnection.GET_TEXT_WITH_STYLES));
+        String afterCursor = Utils.charSeqToString(mInputConnection.getTextAfterCursor(20, InputConnection.GET_TEXT_WITH_STYLES));
+
+        if (beforeCursor == null && afterCursor == null){
+            return null;
+        }
+
         String wholeText = beforeCursor + afterCursor;
         int leftSpace = beforeCursor.lastIndexOf(SPACE);
         int rightSpace = afterCursor.indexOf(SPACE);
@@ -48,6 +67,9 @@ public class InputConnectionHelper {
     }
 
     public Pair<Integer, Integer> getCursorPositions(){
+        if (mInputConnection == null){
+            return null;
+        }
         ExtractedText et = mInputConnection.getExtractedText(new ExtractedTextRequest(), 0);
         if (et == null){
             return new Pair<>(0,0);
@@ -61,6 +83,10 @@ public class InputConnectionHelper {
     public boolean isInSelectionMode(){
         Pair<Integer, Integer> value = getCursorPositions();
         return !value.first.equals(value.second);
+    }
+
+    public void updateInputConnection(InputConnection inputConnection){
+        this.mInputConnection = inputConnection;
     }
 
 }
