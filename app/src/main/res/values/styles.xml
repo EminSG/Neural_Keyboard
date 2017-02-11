@@ -13,6 +13,8 @@
         <item name="android:keyBackground">@drawable/key_selector</item>
         <item name="android:keyTextSize">30sp</item>
         <item name="android:keyTextColor">@android:color/white</item>
+        <item name="android:popupLayout">@layout/key_preview</item>
+        <item name="android:keyPreviewLayout">@layout/key_preview</item>
     </style>
 
 </resources>

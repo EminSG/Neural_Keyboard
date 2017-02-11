@@ -41,7 +41,7 @@
         <Key android:codes="108" android:keyLabel="l" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
-        <Key android:codes="-1" android:keyWidth="15%p" android:keyIcon="@drawable/ic_keyboard_capslock" android:keyEdgeFlags="left"/>
+        <Key android:codes="-1" android:keyWidth="15%p" android:keyIcon="@drawable/ic_keyboard_capslock" android:keyEdgeFlags="left" android:isModifier="true" />
         <Key android:codes="122" android:keyLabel="z"/>
         <Key android:codes="120" android:keyLabel="x"/>
         <Key android:codes="99" android:keyLabel="c"/>
@@ -49,15 +49,14 @@
         <Key android:codes="98" android:keyLabel="b"/>
         <Key android:codes="110" android:keyLabel="n"/>
         <Key android:codes="109" android:keyLabel="m"/>
-        <Key android:codes="-5" android:keyWidth="15%p" android:isRepeatable="true" android:keyIcon="@drawable/ic_backspace" android:keyEdgeFlags="right" />
+        <Key android:codes="-5" android:keyWidth="15%p" android:isRepeatable="true" android:keyIcon="@drawable/ic_backspace" android:isModifier="true" android:keyEdgeFlags="right" />
     </Row>
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="-100" android:keyWidth="15%p" android:keyIcon="@drawable/ic_numeric" android:keyEdgeFlags="left"/>
-        <Key android:codes="-101" android:keyIcon="@drawable/ic_language"/>
+        <Key android:codes="-100" android:keyWidth="15%p" android:keyIcon="@drawable/ic_numeric" android:isModifier="true" android:keyEdgeFlags="left"/>
+        <Key android:codes="-101" android:keyIcon="@drawable/ic_language" android:isModifier="true"/>
         <Key android:codes="44" android:keyLabel="," />
-        <Key android:codes="32" android:keyWidth="30%p" android:isRepeatable="true" android:keyLabel="English"/>
-        <Key android:codes="46" android:keyLabel="." />
-        <Key android:codes="63" android:keyLabel="\? / ! :"/>
-        <Key android:codes="-4" android:keyWidth="15%p" android:keyEdgeFlags="right" android:keyIcon="@drawable/ic_done"/>
+        <Key android:codes="32" android:keyWidth="40%p" android:isRepeatable="true" android:keyLabel="English"/>
+        <Key android:codes="46" android:keyLabel="." android:popupCharacters="\? / !" android:popupKeyboard="@xml/popup"/>
+        <Key android:codes="-4" android:keyWidth="15%p" android:keyEdgeFlags="right" android:keyIcon="@drawable/ic_done" android:isModifier="true"/>
     </Row>
 </Keyboard>

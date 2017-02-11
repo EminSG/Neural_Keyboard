@@ -15,10 +15,9 @@
         android:layout_height="1dp"
         android:background="#909090"/>
 
-    <android.inputmethodservice.KeyboardView
+    <io.ezorrio.keyboard.view.MyKeyboardView
         android:id="@+id/keyboard_view"
         style="@style/Widget.KeyboardView"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

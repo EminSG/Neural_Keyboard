@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,9 +17,9 @@ import io.ezorrio.keyboard.R;
 
 public class SuggestionsView extends FrameLayout {
 
-    private Button mSuggestionOne;
-    private Button mSuggestionTwo;
-    private Button mSuggestionThree;
+    private TextView mSuggestionOne;
+    private TextView mSuggestionTwo;
+    private TextView mSuggestionThree;
 
     public SuggestionsView(Context context) {
         super(context);
@@ -34,9 +34,9 @@ public class SuggestionsView extends FrameLayout {
 
     protected void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.view_suggestion_bar, this);
-        mSuggestionOne = (Button) findViewById(R.id.suggestion_1);
-        mSuggestionTwo = (Button) findViewById(R.id.suggestion_2);
-        mSuggestionThree = (Button) findViewById(R.id.suggestion_3);
+        mSuggestionOne = (TextView) findViewById(R.id.suggestion_1);
+        mSuggestionTwo = (TextView) findViewById(R.id.suggestion_2);
+        mSuggestionThree = (TextView) findViewById(R.id.suggestion_3);
     }
 
     public void updateSuggestions(String suggestion1, String suggestion2, String suggestion3) {
