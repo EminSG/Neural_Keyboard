@@ -16,6 +16,7 @@ import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.ezorrio.keyboard.R;
 import io.ezorrio.keyboard.utils.AppUtils;
@@ -146,6 +147,7 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
 
     @Override
     public void onText(CharSequence text) {
+        refreshShiftState();
     }
 
     @Override
@@ -223,9 +225,19 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
         }
     }
 
+    private Locale currentLocale(){
+        switch (mCurrentLanguage){
+            case RU:
+                return new Locale("ru","RU");
+            case EN:
+            default:
+                return Locale.ENGLISH;
+        }
+    }
+
     private void getSuggestions() {
         final TextServicesManager tsm = (TextServicesManager) getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
-        mSpellCheckerSession = tsm.newSpellCheckerSession(null, null, this, true);
+        mSpellCheckerSession = tsm.newSpellCheckerSession(null, currentLocale(), this, false);
         if (mInputConnectionHelper.getCurrentWord() != null && !mInputConnectionHelper.getCurrentWord().isEmpty()) {
             mSpellCheckerSession.getSuggestions(new TextInfo(mInputConnectionHelper.getCurrentWord()), 3);
         }
