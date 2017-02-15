@@ -60,6 +60,12 @@ public class SuggestionsView extends FrameLayout {
         }
     }
 
+    public void clearSuggestions(){
+        mSuggestionOne.setText(null);
+        mSuggestionTwo.setText(null);
+        mSuggestionThree.setText(null);
+    }
+
     public void setCallback(final SuggestionViewCallback callback){
         mSuggestionOne.setOnClickListener(new OnClickListener() {
             @Override

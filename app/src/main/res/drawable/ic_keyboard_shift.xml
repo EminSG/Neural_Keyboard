@@ -1,8 +1,8 @@
-<!-- drawable/keyboard_return.xml -->
+<!-- drawable/apple_keyboard_shift.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:height="24dp"
     android:width="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path android:fillColor="#D0D0D0" android:pathData="M19,7V11H5.83L9.41,7.41L8,6L2,12L8,18L9.41,16.58L5.83,13H21V7H19Z" />
+    <path android:fillColor="#FFF" android:pathData="M15,18V12H17.17L12,6.83L6.83,12H9V18H15M12,4L22,14H17V20H7V14H2L12,4Z" />
 </vector>

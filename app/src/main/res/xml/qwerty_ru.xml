@@ -44,7 +44,7 @@
         <Key android:codes="1101" android:keyLabel="э" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
-        <Key android:codes="-1" android:keyIcon="@drawable/ic_keyboard_capslock" android:keyEdgeFlags="left" android:horizontalGap="0.5%"/>
+        <Key android:codes="-1" android:keyIcon="@drawable/ic_keyboard_shift" android:keyEdgeFlags="left" android:horizontalGap="0.5%"/>
         <Key android:codes="1103" android:keyLabel="я"/>
         <Key android:codes="1095" android:keyLabel="ч"/>
         <Key android:codes="1089" android:keyLabel="с"/>
@@ -60,7 +60,7 @@
         <Key android:codes="-100" android:keyWidth="15%p" android:keyIcon="@drawable/ic_numeric" android:keyEdgeFlags="left"/>
         <Key android:codes="-101" android:keyWidth="10%p" android:keyIcon="@drawable/ic_language"/>
         <Key android:codes="44" android:keyWidth="10%p" android:keyLabel="," />
-        <Key android:codes="32" android:keyWidth="40%p" android:isRepeatable="true" android:keyLabel="Russian"/>
+        <Key android:codes="32" android:keyWidth="40%p" android:isRepeatable="true" android:keyIcon="@drawable/space_bar"/>
         <Key android:codes="46" android:keyWidth="10%p" android:keyLabel="."/>
         <Key android:codes="-4" android:keyWidth="15%p" android:keyEdgeFlags="right" android:keyIcon="@drawable/ic_done"/>
     </Row>

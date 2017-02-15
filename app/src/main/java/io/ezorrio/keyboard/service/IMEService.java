@@ -8,12 +8,14 @@ import android.media.AudioManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.textservice.SentenceSuggestionsInfo;
 import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -41,10 +43,6 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
 
     private static final String TAG = "IMEService";
 
-    private static final int KEYBOARD_EN = 0;
-    private static final int KEYBOARD_RU = 1;
-    private static final int KEYBOARD_SYMBOLS = 2;
-
     private static final int EN = 0;
     private static final int RU = 1;
 
@@ -56,27 +54,49 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
     private SpellCheckerSession mSpellCheckerSession;
 
     private int mState = STATE_NO_SHIFT;
-    private int mCurrentKeyboard = KEYBOARD_EN;
     private int mCurrentLanguage = EN;
+
+    private Keyboard mKeyboardRussian;
+    private Keyboard mKeyboardEnglish;
+    private Keyboard mKeyboardSymbols;
+
+    @Override
+    public void onInitializeInterface() {
+        mKeyboardRussian = new Keyboard(this, R.xml.qwerty_ru);
+        mKeyboardSymbols = new Keyboard(this, R.xml.keyboard_symbols);
+        mKeyboardEnglish = new Keyboard(this, R.xml.qwerty_en);
+    }
 
     @Override
     public View onCreateInputView() {
         View root = getLayoutInflater().inflate(R.layout.keyboard, null, false);
-        mKeyboard = new Keyboard(this, R.xml.qwerty_en);
 
         mKeyboardView = (MyKeyboardView) root.findViewById(R.id.keyboard_view);
         mKeyboardView.setKeyboard(mKeyboard);
         mKeyboardView.setOnKeyboardActionListener(this);
-        mKeyboardView.setAnimation(null);
         mKeyboardView.setPreviewEnabled(false);
 
         mSuggestionsView  = (SuggestionsView) root.findViewById(R.id.suggestion_view);
         mSuggestionsView.setCallback(this);
-
-        mInputConnection = getCurrentInputConnection();
-        mInputConnectionHelper = new InputConnectionHelper(mInputConnection);
         refreshShiftState();
         return root;
+    }
+
+    @Override
+    public void onStartInput(EditorInfo attribute, boolean restarting) {
+        super.onStartInput(attribute, restarting);
+        mInputConnection = getCurrentInputConnection();
+        mInputConnectionHelper = new InputConnectionHelper(mInputConnection);
+        switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
+            case EditorInfo.TYPE_CLASS_NUMBER:
+            case EditorInfo.TYPE_CLASS_DATETIME:
+                mKeyboard = mKeyboardSymbols;
+                break;
+            case EditorInfo.TYPE_CLASS_TEXT:
+                mKeyboard = mCurrentLanguage == EN ? mKeyboardEnglish : mKeyboardRussian;
+                break;
+        }
+        mState = STATE_NO_SHIFT;
     }
 
     @Override
@@ -89,17 +109,15 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
             case KEYCODE_ABC:
             case KEYCODE_SPACE:
             case KEYCODE_TOGGLE_LANGUAGE:
-                //do nothing
-                break;
+                return;
             default:
-                mKeyboardView.setPreviewEnabled(true);
-                break;
+                //mKeyboardView.showPopup(mKeyboard.getKeys().);
         }
     }
 
     @Override
     public void onRelease(int primaryCode) {
-        mKeyboardView.setPreviewEnabled(false);
+        //mKeyboardView.hidePopup();
     }
 
     @Override
@@ -125,14 +143,13 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
                 mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             case KEYCODE_NUMBERS:
-                setCurrentKeyboard(KEYBOARD_SYMBOLS);
+                setCurrentKeyboard(mKeyboardSymbols);
                 break;
             case KEYCODE_ABC:
-                setCurrentKeyboard(mCurrentLanguage);
+                setCurrentKeyboard(mCurrentLanguage == EN ? mKeyboardEnglish : mKeyboardRussian);
                 break;
             case KEYCODE_TOGGLE_LANGUAGE:
-                int toggleTo = mCurrentLanguage == EN ? KEYBOARD_RU : KEYBOARD_EN;
-                setCurrentKeyboard(toggleTo);
+                setCurrentKeyboard(mCurrentLanguage == EN ? mKeyboardRussian : mKeyboardEnglish);
                 break;
             default:
                 char code = (char) primaryCode;
@@ -198,31 +215,9 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
         mKeyboardView.setAllShifted(mState);
     }
 
-    private void setCurrentKeyboard(int value) {
-        switch (value) {
-            case KEYBOARD_EN:
-                mCurrentKeyboard = KEYBOARD_EN;
-                mCurrentLanguage = EN;
-                mKeyboard = new Keyboard(this, R.xml.qwerty_en);
-                mKeyboardView.setKeyboard(mKeyboard);
-                mKeyboardView.setAllShifted(mState);
-                AppUtils.changeAppLanguage(this, "en");
-                break;
-            case KEYBOARD_RU:
-                mCurrentKeyboard = KEYBOARD_RU;
-                mCurrentLanguage = RU;
-                mKeyboard = new Keyboard(this, R.xml.qwerty_ru);
-                mKeyboardView.setKeyboard(mKeyboard);
-                mKeyboardView.setAllShifted(mState);
-                AppUtils.changeAppLanguage(this, "ru");
-                break;
-            case KEYBOARD_SYMBOLS:
-                mCurrentKeyboard = KEYBOARD_SYMBOLS;
-                mKeyboard = new Keyboard(this, R.xml.keyboard_symbols);
-                mKeyboardView.setKeyboard(mKeyboard);
-                mKeyboardView.setAllShifted(mState);
-                break;
-        }
+    private void setCurrentKeyboard(Keyboard value) {
+        mKeyboard = value;
+        mKeyboardView.setKeyboard(mKeyboard);
     }
 
     private Locale currentLocale(){
@@ -238,6 +233,9 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
     private void getSuggestions() {
         final TextServicesManager tsm = (TextServicesManager) getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
         mSpellCheckerSession = tsm.newSpellCheckerSession(null, currentLocale(), this, false);
+        if (mSpellCheckerSession == null){
+            Toast.makeText(this, "You don\'t have a spell checker for this language" , Toast.LENGTH_SHORT).show();
+        }
         if (mInputConnectionHelper.getCurrentWord() != null && !mInputConnectionHelper.getCurrentWord().isEmpty()) {
             mSpellCheckerSession.getSuggestions(new TextInfo(mInputConnectionHelper.getCurrentWord()), 3);
         }
@@ -246,6 +244,7 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
     @Override
     public void onGetSuggestions(SuggestionsInfo[] results) {
         if (results == null) {
+            mSuggestionsView.clearSuggestions();
             return;
         }
         ArrayList<String> suggestions = new ArrayList<>();
@@ -271,9 +270,12 @@ public class IMEService extends InputMethodService implements KeyboardView.OnKey
         String wordForInsert = mSuggestionsView.getSuggestion(which);
         String currentWord = mInputConnectionHelper.getCurrentWord();
         mInputConnection.finishComposingText();
-        mInputConnection.deleteSurroundingText(currentWord.length(), 0);
+        if (currentWord != null) {
+            mInputConnection.deleteSurroundingText(currentWord.length(), 0);
+        }
         mInputConnection.setComposingText(wordForInsert, 1);
         mInputConnection.finishComposingText();
+        mSuggestionsView.clearSuggestions();
     }
 
     private void updateConnections(){

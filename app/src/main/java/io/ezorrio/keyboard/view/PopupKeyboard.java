@@ -20,20 +20,24 @@ import io.ezorrio.keyboard.utils.Utils;
  */
 
 public class PopupKeyboard extends PopupWindow implements KeyboardView.OnKeyboardActionListener {
+    private Context mContext;
     private InputConnection inputConnection;
     private Keyboard popupKeyboard;
     private KeyboardView keyboardView;
-    public PopupKeyboard(Context context, int xmlResId){
-        this.inputConnection = ((InputMethodService) context).getCurrentInputConnection();
+
+    public PopupKeyboard(Context context, Keyboard.Key key){
+        mContext = context;
+        inputConnection = ((InputMethodService) context).getCurrentInputConnection();
         View custom = LayoutInflater.from(context).inflate(R.layout.popup_keyboard, new FrameLayout(context), false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            custom.setElevation(Utils.dpToPx(context, 5));
+
+        if (key.popupCharacters == null) {
+            popupKeyboard = new Keyboard(mContext, R.xml.popup, key.label, -1, 0);
+        } else {
+            popupKeyboard = new Keyboard(mContext, R.xml.popup, key.popupCharacters, -1, 0);
         }
+        keyboardView.setKeyboard(popupKeyboard);
 
         keyboardView = (KeyboardView) custom.findViewById(R.id.keyboard_view);
-
-        popupKeyboard = new Keyboard(context, xmlResId);
-        keyboardView.setKeyboard(popupKeyboard);
         keyboardView.setPreviewEnabled(false);
         keyboardView.setOnKeyboardActionListener(this);
 
@@ -45,9 +49,7 @@ public class PopupKeyboard extends PopupWindow implements KeyboardView.OnKeyboar
     }
 
     @Override
-    public void onRelease(int primaryCode) {
-        dismiss();
-    }
+    public void onRelease(int primaryCode) {}
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {

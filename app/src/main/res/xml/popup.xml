@@ -2,10 +2,4 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:keyWidth="9%p"
     android:keyHeight="9%p">
-    <Row>
-        <Key android:codes="42" android:keyLabel="*"/>
-        <Key android:codes="34" android:keyLabel="&quot;" />
-        <Key android:codes="33" android:keyLabel="!"/>
-        <Key android:codes="63" android:keyLabel="\?"/>
-    </Row>
 </Keyboard>
